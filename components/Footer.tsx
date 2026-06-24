@@ -45,7 +45,6 @@ export default function Footer() {
               <li><Link href="/our-publications">Best of Kenya</Link></li>
               <li><Link href="/our-publications">Diplomat East Africa</Link></li>
               <li><Link href="/our-publications">Teachers' Image</Link></li>
-              <li><a href="https://ivory-cipher-5259.here.now/" target="_blank" rel="noopener noreferrer">TSC-Image Reach</a></li>
               <li><Link href="/our-publications">Sokoni</Link></li>
             </ul>
           </div>
