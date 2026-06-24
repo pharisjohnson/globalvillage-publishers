@@ -1,6 +1,37 @@
-import Link from 'next/link';
+'use client'
+
+import Link from 'next/link'
+import { useState } from 'react'
 
 export default function Contact() {
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    setStatus('loading')
+    
+    const form = e.currentTarget
+    const formData = new FormData(form)
+    
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData,
+      })
+      
+      const data = await res.json()
+      
+      if (data.success) {
+        setStatus('success')
+        form.reset()
+      } else {
+        setStatus('error')
+      }
+    } catch {
+      setStatus('error')
+    }
+  }
+
   return (
     <>
       {/* Page Header */}
@@ -52,29 +83,49 @@ export default function Contact() {
             </div>
             
             <div className="contact-form">
-              <form action="#" method="POST">
-                <div className="form-group">
-                  <label className="form-label" htmlFor="name">Full Name</label>
-                  <input className="form-input" type="text" id="name" name="name" placeholder="Your name" required />
+              {status === 'success' ? (
+                <div style={{ textAlign: 'center', padding: '3rem 1rem' }}>
+                  <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>&#10003;</div>
+                  <h3 style={{ marginBottom: '0.5rem' }}>Message Sent!</h3>
+                  <p style={{ color: '#666' }}>Thank you for reaching out. We'll get back to you soon.</p>
                 </div>
-                
-                <div className="form-group">
-                  <label className="form-label" htmlFor="email">Email Address</label>
-                  <input className="form-input" type="email" id="email" name="email" placeholder="you@example.com" required />
-                </div>
-                
-                <div className="form-group">
-                  <label className="form-label" htmlFor="subject">Subject</label>
-                  <input className="form-input" type="text" id="subject" name="subject" placeholder="How can we help?" required />
-                </div>
-                
-                <div className="form-group">
-                  <label className="form-label" htmlFor="message">Message</label>
-                  <textarea className="form-textarea" id="message" name="message" placeholder="Tell us about your project..." required></textarea>
-                </div>
-                
-                <button type="submit" className="form-submit">Send Message</button>
-              </form>
+              ) : (
+                <form onSubmit={handleSubmit}>
+                  <input type="hidden" name="access_key" value="65b47948-96e6-42fb-824f-052b01fb800c" />
+                  <input type="hidden" name="subject" value="New Contact from GVP Website" />
+                  <input type="checkbox" name="botcheck" style={{ display: 'none' }} />
+                  
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="name">Full Name</label>
+                    <input className="form-input" type="text" id="name" name="name" placeholder="Your name" required />
+                  </div>
+                  
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="email">Email Address</label>
+                    <input className="form-input" type="email" id="email" name="email" placeholder="you@example.com" required />
+                  </div>
+                  
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="subject">Subject</label>
+                    <input className="form-input" type="text" id="subject" name="subject" placeholder="How can we help?" required />
+                  </div>
+                  
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="message">Message</label>
+                    <textarea className="form-textarea" id="message" name="message" placeholder="Tell us about your project..." required></textarea>
+                  </div>
+                  
+                  <button type="submit" className="form-submit" disabled={status === 'loading'}>
+                    {status === 'loading' ? 'Sending...' : 'Send Message'}
+                  </button>
+                  
+                  {status === 'error' && (
+                    <p style={{ color: '#dc2626', marginTop: '1rem', fontSize: '0.9rem' }}>
+                      Something went wrong. Please try again or email us directly.
+                    </p>
+                  )}
+                </form>
+              )}
             </div>
           </div>
         </div>
@@ -91,5 +142,5 @@ export default function Contact() {
         </div>
       </section>
     </>
-  );
+  )
 }

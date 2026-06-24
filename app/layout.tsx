@@ -21,6 +21,9 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
+  icons: {
+    icon: "/favicon.ico",
+  },
   metadataBase: new URL("https://globalvillagepublishers.co.ke"),
 };
 

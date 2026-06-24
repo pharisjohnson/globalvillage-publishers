@@ -28,7 +28,7 @@ export default function Navbar() {
       <div className="nav-inner">
         <Link href="/" className="logo">
           <img 
-            src="https://globalvillagepublishers.co.ke/wp-content/uploads/2023/05/2-300x300.png" 
+            src="/GVP logo 2.png" 
             alt="Global Village Publishers"
           />
           <span className="logo-text">
@@ -36,23 +36,27 @@ export default function Navbar() {
           </span>
         </Link>
 
-        <ul className="nav-links">
+        <ul className={`nav-links ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
           {navLinks.map((link) => (
             <li key={link.href}>
-              <Link href={link.href} className={link.href === '/' ? 'active' : ''}>
+              <Link 
+                href={link.href} 
+                className={link.href === '/' ? 'active' : ''}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
                 {link.label}
               </Link>
             </li>
           ))}
           <li>
-            <Link href="/contact" className="nav-cta">
+            <Link href="/contact" className="nav-cta" onClick={() => setIsMobileMenuOpen(false)}>
               Contact Us
             </Link>
           </li>
         </ul>
 
         <button 
-          className="mobile-toggle" 
+          className={`mobile-toggle ${isMobileMenuOpen ? 'open' : ''}`}
           aria-label="Toggle menu"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >

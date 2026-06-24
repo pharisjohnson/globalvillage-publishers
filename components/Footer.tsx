@@ -8,7 +8,7 @@ export default function Footer() {
           <div className="footer-brand">
             <div className="footer-logo">
               <img 
-                src="https://globalvillagepublishers.co.ke/wp-content/uploads/2023/05/2-300x300.png" 
+                src="/GVP logo 2.png" 
                 alt="Global Village Publishers" 
               />
               <span>Global Village Publishers</span>
@@ -45,6 +45,7 @@ export default function Footer() {
               <li><Link href="/our-publications">Best of Kenya</Link></li>
               <li><Link href="/our-publications">Diplomat East Africa</Link></li>
               <li><Link href="/our-publications">Teachers' Image</Link></li>
+              <li><a href="https://ivory-cipher-5259.here.now/" target="_blank" rel="noopener noreferrer">TSC-Image Reach</a></li>
               <li><Link href="/our-publications">Sokoni</Link></li>
             </ul>
           </div>

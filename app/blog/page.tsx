@@ -1,6 +1,34 @@
-import Link from 'next/link';
+import Link from 'next/link'
+import fs from 'fs'
+import path from 'path'
+import matter from 'gray-matter'
+
+function getPosts() {
+  const contentDir = path.join(process.cwd(), 'content')
+  const files = fs.readdirSync(contentDir).filter(f => f.endsWith('.mdx'))
+  
+  const posts = files.map((filename) => {
+    const slug = filename.replace('.mdx', '')
+    const filePath = path.join(contentDir, filename)
+    const fileContent = fs.readFileSync(filePath, 'utf8')
+    const { data } = matter(fileContent)
+    
+    return {
+      slug,
+      title: data.title || slug,
+      date: data.date || '',
+      category: data.category || '',
+      excerpt: data.excerpt || '',
+      image: data.image || '',
+    }
+  })
+  
+  return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+}
 
 export default function Blog() {
+  const posts = getPosts()
+
   return (
     <>
       {/* Page Header */}
@@ -16,47 +44,22 @@ export default function Blog() {
       <section className="section">
         <div className="section-inner">
           <div className="blog-grid">
-            {/* Blog Post 1 */}
-            <article className="blog-card">
-              <div style={{
-                background: 'linear-gradient(135deg, #1a365d 0%, #2c5282 100%)',
-                height: '200px',
-              }} />
-              <div className="blog-content">
-                <div className="blog-meta">Publishing Trends</div>
-                <h2 className="blog-title">The Evolution of Print Media in Kenya</h2>
-                <p className="blog-excerpt">From colonial-era publications to today's vibrant publishing landscape, Kenya's print media has undergone a remarkable transformation. We explore the milestones that shaped the industry and where it's headed next.</p>
-                <span className="blog-link">Read More &rarr;</span>
-              </div>
-            </article>
-
-            {/* Blog Post 2 */}
-            <article className="blog-card">
-              <div style={{
-                background: 'linear-gradient(135deg, #8B4513 0%, #D2691E 100%)',
-                height: '200px',
-              }} />
-              <div className="blog-content">
-                <div className="blog-meta">Institutional Publishing</div>
-                <h2 className="blog-title">Why Every Institution Needs a Commemorative Book</h2>
-                <p className="blog-excerpt">A commemorative book is more than a publication — it's a legacy. Learn why schools, corporations, and government bodies across Kenya are investing in premium coffee table books to preserve their stories.</p>
-                <span className="blog-link">Read More &rarr;</span>
-              </div>
-            </article>
-
-            {/* Blog Post 3 */}
-            <article className="blog-card">
-              <div style={{
-                background: 'linear-gradient(135deg, #EC5C23 0%, #f97316 100%)',
-                height: '200px',
-              }} />
-              <div className="blog-content">
-                <div className="blog-meta">Industry Outlook</div>
-                <h2 className="blog-title">The Future of Publishing in East Africa</h2>
-                <p className="blog-excerpt">As digital media grows, traditional publishing in East Africa faces both challenges and opportunities. We examine the trends shaping the next decade of books and magazines in the region.</p>
-                <span className="blog-link">Read More &rarr;</span>
-              </div>
-            </article>
+            {posts.map((post) => (
+              <Link key={post.slug} href={`/blog/${post.slug}`} style={{ textDecoration: 'none' }}>
+                <article className="blog-card">
+                  <div style={{
+                    background: post.image ? `url(${post.image}) center/cover no-repeat` : 'linear-gradient(135deg, #1a365d 0%, #2c5282 100%)',
+                    height: '200px',
+                  }} />
+                  <div className="blog-content">
+                    <div className="blog-meta">{post.category}</div>
+                    <h2 className="blog-title">{post.title}</h2>
+                    <p className="blog-excerpt">{post.excerpt}</p>
+                    <span className="blog-link">Read More &rarr;</span>
+                  </div>
+                </article>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
@@ -72,5 +75,5 @@ export default function Blog() {
         </div>
       </section>
     </>
-  );
+  )
 }

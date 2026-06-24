@@ -3,170 +3,9 @@ import Link from 'next/link';
 export default function Home() {
   return (
     <>
-      {/* Hero Section */}
-      <section style={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
-        position: 'relative',
-        overflow: 'hidden',
-        paddingTop: '72px',
-      }}>
-        <div style={{
-          position: 'absolute',
-          top: '-50%',
-          right: '-20%',
-          width: '800px',
-          height: '800px',
-          background: 'radial-gradient(circle, #EC5C23 0%, transparent 70%)',
-          opacity: 0.15,
-        }} />
-        
-        <div style={{
-          maxWidth: '1200px',
-          margin: '0 auto',
-          padding: '80px 24px',
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '60px',
-          alignItems: 'center',
-          position: 'relative',
-          zIndex: 1,
-        }}>
-          <div style={{ color: '#fff' }}>
-            <div style={{
-              display: 'inline-block',
-              fontFamily: "'Inter', sans-serif",
-              fontSize: '11px',
-              fontWeight: 600,
-              color: '#EC5C23',
-              background: 'rgba(236, 92, 35, 0.15)',
-              padding: '8px 16px',
-              borderRadius: '100px',
-              textTransform: 'uppercase',
-              letterSpacing: '2px',
-              marginBottom: '24px',
-            }}>
-              Since 2008
-            </div>
-            
-            <h1 style={{
-              fontFamily: "'Inter', sans-serif",
-              fontSize: 'clamp(40px, 5vw, 64px)',
-              fontWeight: 800,
-              lineHeight: 1.05,
-              letterSpacing: '-2px',
-              marginBottom: '24px',
-            }}>
-              Books Worth Keeping.<br />
-              <span style={{ color: '#EC5C23' }}>Stories Worth Telling.</span>
-            </h1>
-            
-            <p style={{
-              fontSize: '18px',
-              color: 'rgba(255, 255, 255, 0.7)',
-              maxWidth: '500px',
-              marginBottom: '32px',
-              lineHeight: 1.7,
-            }}>
-              Kenya's premier commemorative book publishers. We research, write, design and publish premium books for institutions, companies and individuals marking the milestones that matter.
-            </p>
-            
-            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-              <Link href="/contact" className="btn btn-primary">
-                Commission a Book
-              </Link>
-              <Link href="/our-publications" className="btn btn-secondary">
-                See Our Work
-              </Link>
-            </div>
-          </div>
-          
-          <div style={{ position: 'relative' }}>
-            <img 
-              src="/gvp hero image.jpg"
-              alt="Global Village Publishers Published Books"
-              style={{
-                width: '100%',
-                borderRadius: '16px',
-                boxShadow: '0 24px 48px rgba(0, 0, 0, 0.3)',
-              }}
-            />
-            
-            <div style={{
-              position: 'absolute',
-              bottom: '-30px',
-              left: '-30px',
-              background: '#fff',
-              padding: '24px 32px',
-              borderRadius: '12px',
-              boxShadow: '0 12px 32px rgba(0, 0, 0, 0.15)',
-              display: 'flex',
-              gap: '32px',
-            }}>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: '28px',
-                  fontWeight: 800,
-                  color: '#EC5C23',
-                  lineHeight: 1,
-                }}>16+</div>
-                <div style={{
-                  fontSize: '11px',
-                  fontWeight: 500,
-                  color: 'rgba(65, 65, 66, 0.6)',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.5px',
-                  marginTop: '4px',
-                }}>Years</div>
-              </div>
-              
-              <div style={{ textAlign: 'center' }}>
-                <div style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: '28px',
-                  fontWeight: 800,
-                  color: '#EC5C23',
-                  lineHeight: 1,
-                }}>30+</div>
-                <div style={{
-                  fontSize: '11px',
-                  fontWeight: 500,
-                  color: 'rgba(65, 65, 66, 0.6)',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.5px',
-                  marginTop: '4px',
-                }}>Books</div>
-              </div>
-              
-              <div style={{ textAlign: 'center' }}>
-                <div style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: '28px',
-                  fontWeight: 800,
-                  color: '#EC5C23',
-                  lineHeight: 1,
-                }}>100+</div>
-                <div style={{
-                  fontSize: '11px',
-                  fontWeight: 500,
-                  color: 'rgba(65, 65, 66, 0.6)',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.5px',
-                  marginTop: '4px',
-                }}>Clients</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Best of the World Section */}
-      <section className="section" style={{ background: '#fff', padding: '60px 0' }}>
+      <section className="section" style={{ background: '#fff', padding: '120px 0 60px' }}>
         <div className="section-inner" style={{ textAlign: 'center' }}>
-          <div className="section-tag">Our Reach</div>
           <h2 className="section-title">Best of the World</h2>
           <p className="section-desc">Our mission is to proudly showcase the Best of every Nation, their Cities and its People to the World</p>
           <img 
@@ -179,6 +18,62 @@ export default function Home() {
               marginTop: '32px',
             }}
           />
+        </div>
+      </section>
+
+      {/* Hero Section */}
+      <section className="hero-section">
+        <div className="hero-glow" />
+        
+        <div className="hero-grid">
+          <div className="hero-content">
+            <div className="hero-badge">
+              Since 2008
+            </div>
+            
+            <h1 className="hero-heading">
+              Books Worth Keeping.<br />
+              <span style={{ color: '#EC5C23' }}>Stories Worth Telling.</span>
+            </h1>
+            
+            <p className="hero-text">
+              Kenya's premier commemorative book publishers. We research, write, design and publish premium books for institutions, companies and individuals marking the milestones that matter.
+            </p>
+            
+            <div className="hero-buttons">
+              <Link href="/contact" className="btn btn-primary">
+                Commission a Book
+              </Link>
+              <Link href="/our-publications" className="btn btn-secondary">
+                See Our Work
+              </Link>
+            </div>
+          </div>
+          
+          <div className="hero-image-wrapper">
+            <img 
+              src="/gvp hero image.jpg"
+              alt="Global Village Publishers Published Books"
+              className="hero-image"
+            />
+            
+            <div className="hero-stats">
+              <div className="hero-stat">
+                <div className="hero-stat-number">16+</div>
+                <div className="hero-stat-label">Years</div>
+              </div>
+              
+              <div className="hero-stat">
+                <div className="hero-stat-number">30+</div>
+                <div className="hero-stat-label">Books</div>
+              </div>
+              
+              <div className="hero-stat">
+                <div className="hero-stat-number">100+</div>
+                <div className="hero-stat-label">Clients</div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
