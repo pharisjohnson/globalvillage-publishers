@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     type: "website",
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: "/GVP logo 2.png",
   },
   metadataBase: new URL("https://globalvillagepublishers.co.ke"),
 };
