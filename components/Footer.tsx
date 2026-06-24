@@ -45,6 +45,7 @@ export default function Footer() {
               <li><Link href="/our-publications">Best of Kenya</Link></li>
               <li><Link href="/our-publications">Diplomat East Africa</Link></li>
               <li><Link href="/our-publications">Teachers' Image</Link></li>
+              <li><Link href="/tsc-image-magazine">TSC Image Magazine</Link></li>
               <li><Link href="/our-publications">Sokoni</Link></li>
             </ul>
           </div>
