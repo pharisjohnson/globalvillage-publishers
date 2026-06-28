@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import fs from 'fs'
 import path from 'path'
-import matter from 'gray-matter'
 
 function getAllPostSlugs() {
   const contentDir = path.join(process.cwd(), 'content')
@@ -21,11 +20,9 @@ export default async function BlogPost({
 }) {
   const { slug } = await params
   
-  const filePath = path.join(process.cwd(), 'content', `${slug}.mdx`)
-  const fileContent = fs.readFileSync(filePath, 'utf8')
-  const { data: metadata } = matter(fileContent)
-  
-  const { default: Post } = await import(`@/content/${slug}.mdx`)
+  const mod = await import(`@/content/${slug}.mdx`)
+  const metadata = mod.metadata || {}
+  const Post = mod.default
 
   return (
     <>

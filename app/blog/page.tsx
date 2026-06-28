@@ -1,33 +1,33 @@
 import Link from 'next/link'
 import fs from 'fs'
 import path from 'path'
-import matter from 'gray-matter'
 
-function getPosts() {
+async function getPosts() {
   const contentDir = path.join(process.cwd(), 'content')
   const files = fs.readdirSync(contentDir).filter(f => f.endsWith('.mdx'))
   
-  const posts = files.map((filename) => {
-    const slug = filename.replace('.mdx', '')
-    const filePath = path.join(contentDir, filename)
-    const fileContent = fs.readFileSync(filePath, 'utf8')
-    const { data } = matter(fileContent)
-    
-    return {
-      slug,
-      title: data.title || slug,
-      date: data.date || '',
-      category: data.category || '',
-      excerpt: data.excerpt || '',
-      image: data.image || '',
-    }
-  })
+  const posts = await Promise.all(
+    files.map(async (filename) => {
+      const slug = filename.replace('.mdx', '')
+      const mod = await import(`@/content/${slug}.mdx`)
+      const metadata = mod.metadata || {}
+      
+      return {
+        slug,
+        title: metadata.title || slug,
+        date: metadata.date || '',
+        category: metadata.category || '',
+        excerpt: metadata.excerpt || '',
+        image: metadata.image || '',
+      }
+    })
+  )
   
   return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 }
 
-export default function Blog() {
-  const posts = getPosts()
+export default async function Blog() {
+  const posts = await getPosts()
 
   return (
     <>
