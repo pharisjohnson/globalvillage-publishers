@@ -381,11 +381,15 @@ body {
 }
 
 .publication-card {
+  display: block;
   background: #fff;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   transition: all 0.3s;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
 }
 
 .publication-card:hover {
@@ -393,10 +397,41 @@ body {
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
 }
 
+.publication-img-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
 .publication-img {
   width: 100%;
   aspect-ratio: 3/4;
   object-fit: cover;
+  display: block;
+  transition: transform 0.4s;
+}
+
+.publication-card:hover .publication-img {
+  transform: scale(1.05);
+}
+
+.publication-dl-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(236, 92, 35, 0.85);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.publication-card:hover .publication-dl-overlay {
+  opacity: 1;
 }
 
 .publication-info {

@@ -17,6 +17,87 @@ const diploCovers = [
   { src: '/diplomatt-min.jpg', alt: 'Diplomat Collection', label: 'Multiple Editions' },
 ];
 
+interface GridPub {
+  src: string;
+  alt: string;
+  title: string;
+  series: string;
+  href: string;
+}
+
+const gridPubs: GridPub[] = [
+  {
+    src: '/Best-of-kenya-cover-min.jpg',
+    alt: 'Best of Kenya',
+    title: 'Best of Kenya',
+    series: 'Volume 1-4 Series',
+    href: '/Best of Kenya Vol 4 - Beyond 60.pdf.pdf',
+  },
+  {
+    src: '/Best of Kenya Volume 4 - Beyond 60.png',
+    alt: 'Best of Kenya Vol 4',
+    title: 'Best of Kenya Vol. 4',
+    series: 'Kenya Beyond 60',
+    href: '/Best of Kenya Vol 4 - Beyond 60.pdf.pdf',
+  },
+  {
+    src: '/BOK COOPERATIVES  cover.jpg',
+    alt: 'Best of Kenya Cooperatives',
+    title: 'Best of Kenya Cooperatives',
+    series: '2025 Special Edition',
+    href: '/BOK COOPERATIVES - FINAL.pdf.pdf',
+  },
+  {
+    src: '/Diplomat-18.png',
+    alt: 'Diplomat East Africa',
+    title: 'Diplomat East Africa',
+    series: 'Volume 1-19 Series',
+    href: '/contact',
+  },
+  {
+    src: '/Diplomat-Obama.jpg',
+    alt: 'Diplomat East Africa Special Edition',
+    title: 'Diplomat Special Edition',
+    series: 'Obama Edition',
+    href: '/contact',
+  },
+  {
+    src: '/sokoni-min-1.jpg',
+    alt: 'Sokoni Magazine',
+    title: 'Sokoni',
+    series: 'Business Magazine',
+    href: '/contact',
+  },
+  {
+    src: '/Diplomat-6-01.jpg',
+    alt: 'Diplomat East Africa Vol 6',
+    title: 'Diplomat Vol. 6',
+    series: 'East Africa Edition',
+    href: '/contact',
+  },
+  {
+    src: '/Diploat19-2-01.jpg',
+    alt: 'Diplomat East Africa Vol 19',
+    title: 'Diplomat Vol. 19',
+    series: 'Latest Edition',
+    href: '/contact',
+  },
+  {
+    src: '/tsc-image-vol35.jpg',
+    alt: "Teachers' Image Vol 35",
+    title: "Teachers' Image",
+    series: 'Volume 35 (Jan-Jun 2026)',
+    href: '/Teachers-Image-Vol35.pdf',
+  },
+  {
+    src: '/diplomatt-min.jpg',
+    alt: 'Diplomat Magazine Collection',
+    title: 'Diplomat Collection',
+    series: 'Multiple Editions',
+    href: '/contact',
+  },
+];
+
 function CoverCarousel({ covers }: { covers: typeof bokCovers }) {
   const [current, setCurrent] = useState(0);
 
@@ -168,85 +249,27 @@ export default function OurPublications() {
           </div>
           
           <div className="publications-grid">
-            <article className="publication-card">
-              <img src="/Best-of-kenya-cover-min.jpg" alt="Best of Kenya" className="publication-img" />
-              <div className="publication-info">
-                <h3 className="publication-title">Best of Kenya</h3>
-                <p className="publication-series">Volume 1-4 Series</p>
-              </div>
-            </article>
-            
-            <article className="publication-card">
-              <img src="/Best of Kenya Volume 4 - Beyond 60.png" alt="Best of Kenya Vol 4" className="publication-img" />
-              <div className="publication-info">
-                <h3 className="publication-title">Best of Kenya Vol. 4</h3>
-                <p className="publication-series">Kenya Beyond 60</p>
-              </div>
-            </article>
-            
-            <article className="publication-card">
-              <img src="/BOK COOPERATIVES  cover.jpg" alt="Best of Kenya Cooperatives" className="publication-img" />
-              <div className="publication-info">
-                <h3 className="publication-title">Best of Kenya Cooperatives</h3>
-                <p className="publication-series">2025 Special Edition</p>
-              </div>
-            </article>
-            
-            <article className="publication-card">
-              <img src="/Diplomat-18.png" alt="Diplomat East Africa" className="publication-img" />
-              <div className="publication-info">
-                <h3 className="publication-title">Diplomat East Africa</h3>
-                <p className="publication-series">Volume 1-19 Series</p>
-              </div>
-            </article>
-            
-            <article className="publication-card">
-              <img src="/Diplomat-Obama.jpg" alt="Diplomat East Africa Special Edition" className="publication-img" />
-              <div className="publication-info">
-                <h3 className="publication-title">Diplomat Special Edition</h3>
-                <p className="publication-series">Obama Edition</p>
-              </div>
-            </article>
-            
-            <article className="publication-card">
-              <img src="/sokoni-min-1.jpg" alt="Sokoni Magazine" className="publication-img" />
-              <div className="publication-info">
-                <h3 className="publication-title">Sokoni</h3>
-                <p className="publication-series">Business Magazine</p>
-              </div>
-            </article>
-            
-            <article className="publication-card">
-              <img src="/Diplomat-6-01.jpg" alt="Diplomat East Africa Vol 6" className="publication-img" />
-              <div className="publication-info">
-                <h3 className="publication-title">Diplomat Vol. 6</h3>
-                <p className="publication-series">East Africa Edition</p>
-              </div>
-            </article>
-            
-            <article className="publication-card">
-              <img src="/Diploat19-2-01.jpg" alt="Diplomat East Africa Vol 19" className="publication-img" />
-              <div className="publication-info">
-                <h3 className="publication-title">Diplomat Vol. 19</h3>
-                <p className="publication-series">Latest Edition</p>
-              </div>
-            </article>
-            
-            <article className="publication-card">
-              <img src="/tsc-image-vol35.jpg" alt="Teachers' Image Vol 35" className="publication-img" />
-              <div className="publication-info">
-                <h3 className="publication-title">Teachers' Image</h3>
-                <p className="publication-series">Volume 35 (Jan-Jun 2026)</p>
-              </div>
-            </article>
-            
-            <article className="publication-card">
-              <img src="/diplomatt-min.jpg" alt="Diplomat Magazine Collection" className="publication-img" />
-              <div className="publication-info">
-                <h3 className="publication-title">Diplomat Collection</h3>
-                <p className="publication-series">Multiple Editions</p>
-              </div>
-            </article>
+            {gridPubs.map((pub, i) => (
+              <a
+                key={i}
+                href={pub.href}
+                target={pub.href.endsWith('.pdf') ? '_blank' : undefined}
+                rel={pub.href.endsWith('.pdf') ? 'noopener noreferrer' : undefined}
+                className="publication-card"
+              >
+                <div className="publication-img-wrap">
+                  <img src={pub.src} alt={pub.alt} className="publication-img" />
+                  <span className="publication-dl-overlay">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 15V3m0 12l-4-4m4 4l4-4M21 15v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    Download
+                  </span>
+                </div>
+                <div className="publication-info">
+                  <h3 className="publication-title">{pub.title}</h3>
+                  <p className="publication-series">{pub.series}</p>
+                </div>
+              </a>
+            ))}
           </div>
         </div>
       </section>
