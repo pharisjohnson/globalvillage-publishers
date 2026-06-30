@@ -1,4 +1,57 @@
+'use client';
+
 import Link from 'next/link';
+import { useState, useEffect, useCallback } from 'react';
+
+const bokCovers = [
+  { src: '/Best-of-kenya-cover-min.jpg', alt: 'Best of Kenya', label: 'Volume 1-4 Series' },
+  { src: '/Best of Kenya Volume 4 - Beyond 60.png', alt: 'Best of Kenya Vol 4', label: 'Kenya Beyond 60' },
+  { src: '/BOK COOPERATIVES  cover.jpg', alt: 'Best of Kenya Cooperatives', label: '2025 Special Edition' },
+];
+
+const diploCovers = [
+  { src: '/Diplomat-18.png', alt: 'Diplomat East Africa', label: 'Vol 18' },
+  { src: '/Diplomat-6-01.jpg', alt: 'Diplomat Vol 6', label: 'East Africa Edition' },
+  { src: '/Diploat19-2-01.jpg', alt: 'Diplomat Vol 19', label: 'Latest Edition' },
+  { src: '/Diplomat-Obama.jpg', alt: 'Diplomat Special Edition', label: 'Obama Edition' },
+  { src: '/diplomatt-min.jpg', alt: 'Diplomat Collection', label: 'Multiple Editions' },
+];
+
+function CoverCarousel({ covers }: { covers: typeof bokCovers }) {
+  const [current, setCurrent] = useState(0);
+
+  const next = useCallback(() => setCurrent((c) => (c + 1) % covers.length), [covers.length]);
+  const prev = useCallback(() => setCurrent((c) => (c - 1 + covers.length) % covers.length), [covers.length]);
+
+  useEffect(() => {
+    const timer = setInterval(next, 4000);
+    return () => clearInterval(timer);
+  }, [next]);
+
+  return (
+    <div className="carousel">
+      <div className="carousel-track" style={{ transform: `translateX(-${current * 100}%)` }}>
+        {covers.map((cover, i) => (
+          <div key={i} className="carousel-slide">
+            <img src={cover.src} alt={cover.alt} />
+            <span className="carousel-label">{cover.label}</span>
+          </div>
+        ))}
+      </div>
+      <button className="carousel-btn carousel-prev" onClick={prev} aria-label="Previous">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      </button>
+      <button className="carousel-btn carousel-next" onClick={next} aria-label="Next">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      </button>
+      <div className="carousel-dots">
+        {covers.map((_, i) => (
+          <button key={i} className={`carousel-dot${i === current ? ' active' : ''}`} onClick={() => setCurrent(i)} aria-label={`Go to slide ${i + 1}`} />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function OurPublications() {
   return (
@@ -26,9 +79,19 @@ export default function OurPublications() {
                 <li>In-depth cultural and historical features</li>
                 <li>Premium hardcover printing</li>
               </ul>
+              <div className="pub-actions">
+                <a href="/Best of Kenya Vol 4 - Beyond 60.pdf.pdf" target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 15V3m0 12l-4-4m4 4l4-4M21 15v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  Download Vol. 4
+                </a>
+                <a href="/BOK COOPERATIVES - FINAL.pdf.pdf" target="_blank" rel="noopener noreferrer" className="btn btn-outline">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 15V3m0 12l-4-4m4 4l4-4M21 15v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  Download Cooperatives
+                </a>
+              </div>
             </div>
             <div className="pub-visual">
-              <img src="/Best-of-kenya-cover-min.jpg" alt="Best of Kenya Coffee Table Book" style={{ width: '100%', borderRadius: '16px' }} />
+              <CoverCarousel covers={bokCovers} />
             </div>
           </div>
 
@@ -43,9 +106,12 @@ export default function OurPublications() {
                 <li>Exclusive interviews with key leaders</li>
                 <li>Distributed across East African embassies</li>
               </ul>
+              <a href="/contact" className="btn btn-primary">
+                Request a Copy
+              </a>
             </div>
             <div className="pub-visual">
-              <img src="/Diplomat-18.png" alt="Diplomat East Africa Magazine" style={{ width: '100%', borderRadius: '16px' }} />
+              <CoverCarousel covers={diploCovers} />
             </div>
           </div>
 
@@ -60,6 +126,10 @@ export default function OurPublications() {
                 <li>Policy updates and professional development</li>
                 <li>Stories of educational excellence</li>
               </ul>
+              <a href="/Teachers-Image-Vol35.pdf" target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 15V3m0 12l-4-4m4 4l4-4M21 15v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                Download Vol. 35
+              </a>
             </div>
             <div className="pub-visual">
               <img src="/tsc-image-vol35.jpg" alt="Teachers' Image Vol 35 Cover" style={{ width: '100%', borderRadius: '16px' }} />
@@ -77,6 +147,9 @@ export default function OurPublications() {
                 <li>Entrepreneur profiles and success stories</li>
                 <li>Regional economic coverage</li>
               </ul>
+              <a href="/contact" className="btn btn-primary">
+                Request a Copy
+              </a>
             </div>
             <div className="pub-visual">
               <img src="/sokoni-min-1.jpg" alt="Sokoni Business Magazine" style={{ width: '100%', borderRadius: '16px' }} />
