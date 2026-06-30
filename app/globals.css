@@ -718,6 +718,101 @@ body {
   text-decoration: none;
 }
 
+/* Footer Publication Cards */
+.footer-publications-col {
+  min-width: 0;
+}
+
+.footer-pub-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-pub-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 8px;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.footer-pub-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(236, 92, 35, 0.3);
+}
+
+.footer-pub-cover {
+  width: 48px;
+  height: 64px;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.footer-pub-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.footer-pub-meta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.footer-pub-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.footer-pub-series {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.footer-pub-dl {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #EC5C23;
+  text-decoration: none;
+  margin-top: 4px;
+  padding: 4px 8px;
+  background: rgba(236, 92, 35, 0.12);
+  border-radius: 4px;
+  width: fit-content;
+  transition: background 0.2s, color 0.2s;
+}
+
+.footer-pub-dl:hover {
+  background: #EC5C23;
+  color: #fff;
+}
+
+.footer-pub-dl svg {
+  flex-shrink: 0;
+}
+
 /* Publications Page */
 .pub-detail {
   display: grid;
@@ -1106,6 +1201,16 @@ body {
 
   .footer-grid {
     grid-template-columns: 1fr;
+  }
+
+  .footer-pub-card {
+    gap: 14px;
+    padding: 10px;
+  }
+
+  .footer-pub-cover {
+    width: 56px;
+    height: 72px;
   }
 
   .footer-bottom {
