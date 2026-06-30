@@ -49,6 +49,27 @@ export default function Footer() {
               <li><Link href="/our-publications">Sokoni</Link></li>
             </ul>
           </div>
+
+          <div>
+            <h4 className="footer-heading">Download Resources</h4>
+            <ul className="footer-links">
+              <li>
+                <a href="/Best of Kenya Vol 4 - Beyond 60.pdf.pdf" target="_blank" rel="noopener noreferrer">
+                  Best of Kenya Vol. 4
+                </a>
+              </li>
+              <li>
+                <a href="/BOK COOPERATIVES - FINAL.pdf.pdf" target="_blank" rel="noopener noreferrer">
+                  Best of Kenya Cooperatives
+                </a>
+              </li>
+              <li>
+                <a href="/Teachers-Image-Vol35.pdf" target="_blank" rel="noopener noreferrer">
+                  Teachers' Image Vol 35
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
         
         <div className="footer-bottom">
