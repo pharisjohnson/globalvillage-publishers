@@ -28,7 +28,7 @@ export default function Navbar() {
       <div className="nav-inner">
         <Link href="/" className="logo">
           <img 
-            src="/GVP logo 2.png" 
+            src="/gvp-logo.png" 
             alt="Global Village Publishers"
           />
           <span className="logo-text">
