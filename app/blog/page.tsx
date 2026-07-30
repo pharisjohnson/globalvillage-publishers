@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import fs from 'fs'
 import path from 'path'
+import { NewsletterSignup } from '@/components/NewsletterSignup'
 
 async function getPosts() {
   const contentDir = path.join(process.cwd(), 'content')
@@ -61,6 +62,9 @@ export default async function Blog() {
               </Link>
             ))}
           </div>
+
+          {/* Newsletter Signup */}
+          <NewsletterSignup />
         </div>
       </section>
 

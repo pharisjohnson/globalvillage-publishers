@@ -1,6 +1,9 @@
 import Link from 'next/link'
 import fs from 'fs'
 import path from 'path'
+import type { Metadata } from 'next'
+import { AuthorBio, RelatedPosts, ShareButtons } from '@/components/BlogEnhancements'
+import { getAllPosts } from '@/lib/blog-utils'
 
 function getAllPostSlugs() {
   const contentDir = path.join(process.cwd(), 'content')
@@ -13,6 +16,30 @@ export function generateStaticParams() {
   return slugs.map((slug) => ({ slug }))
 }
 
+// Dynamic metadata per post
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  try {
+    const mod = await import(`@/content/${slug}.mdx`)
+    const m = mod.metadata || {}
+    return {
+      title: `${m.title} | Global Village Publishers`,
+      description: m.excerpt || '',
+      openGraph: {
+        title: m.title,
+        description: m.excerpt,
+        images: m.image ? [{ url: m.image }] : [],
+      },
+    }
+  } catch {
+    return { title: 'Blog | Global Village Publishers' }
+  }
+}
+
 export default async function BlogPost({
   params,
 }: {
@@ -23,6 +50,17 @@ export default async function BlogPost({
   const mod = await import(`@/content/${slug}.mdx`)
   const metadata = mod.metadata || {}
   const Post = mod.default
+
+  // Get all posts for RelatedPosts component
+  const allPosts = getAllPosts()
+  const postsData = allPosts.map(p => ({
+    slug: p.slug,
+    title: p.title,
+    excerpt: p.excerpt,
+    category: p.category,
+    date: p.date,
+    image: p.image,
+  }))
 
   return (
     <>
@@ -57,6 +95,12 @@ export default async function BlogPost({
           <article>
             <Post />
           </article>
+
+          {/* Share Buttons, Author Bio, Related Posts */}
+          <ShareButtons title={metadata.title} description={metadata.excerpt} />
+          <AuthorBio />
+          <RelatedPosts currentSlug={slug} posts={postsData} />
+
           <div style={{ marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid #eee' }}>
             <Link href="/blog" style={{ color: '#EC5C23', textDecoration: 'none', fontWeight: 600 }}>
               &larr; Back to Blog
