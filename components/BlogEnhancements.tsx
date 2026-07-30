@@ -23,7 +23,7 @@ export interface BlogPost {
 const DEFAULT_AUTHOR: Author = {
   name: "Matata",
   role: "Publisher & Content Strategist",
-  bio: "Matata leads content development at Global Village Publishers, where he helps institutions across East Africa preserve their stories in print. With over a decade in publishing, he's worked on commemorative volumes for schools, corporations, and government bodies.",
+  bio: "Matata is a marketer cum writer with over 6 years experience in the marketing industry. He is enthusiastic about connecting businesses to customers through compelling brand narratives that cut through the noise. At Global Village Publishers, he leads content strategy for institutional commemorative books, corporate profiles, and branded magazines including Teachers' Image and Diplomat East Africa. His work sits at the intersection of strategic marketing and authentic storytelling — helping organisations articulate who they are, what they stand for, and why it matters. Matata believes the best marketing doesn't feel like marketing at all; it feels like a story worth sharing.",
 }
 
 interface AuthorBioProps {
