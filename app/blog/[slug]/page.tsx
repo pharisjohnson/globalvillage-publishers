@@ -97,7 +97,7 @@ export default async function BlogPost({
           </article>
 
           {/* Share Buttons, Author Bio, Related Posts */}
-          <ShareButtons title={metadata.title} description={metadata.excerpt} />
+          <ShareButtons title={metadata.title} />
           <AuthorBio />
           <RelatedPosts currentSlug={slug} posts={postsData} />
 
