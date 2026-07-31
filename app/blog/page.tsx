@@ -20,11 +20,14 @@ async function getPosts() {
         category: metadata.category || '',
         excerpt: metadata.excerpt || '',
         image: metadata.image || '',
+        draft: metadata.draft === true,
       }
     })
   )
   
-  return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  return posts
+    .filter(post => !post.draft)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 }
 
 export default async function Blog() {

@@ -8,6 +8,7 @@ export interface BlogPost {
   category: string
   excerpt: string
   image: string
+  draft?: boolean
 }
 
 function extractMetadata(fileContent: string): Partial<BlogPost> {
@@ -43,6 +44,7 @@ export function getAllPosts(): BlogPost[] {
       category: metadata.category || '',
       excerpt: metadata.excerpt || '',
       image: metadata.image || '',
+      draft: metadata.draft === true,
     }
-  })
+  }).filter(post => !post.draft)
 }

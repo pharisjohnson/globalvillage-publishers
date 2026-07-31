@@ -3,12 +3,14 @@ import fs from 'fs'
 import path from 'path'
 import type { Metadata } from 'next'
 import { AuthorBio, RelatedPosts, ShareButtons } from '@/components/BlogEnhancements'
-import { getAllPosts } from '@/lib/blog-utils'
+import { getAllPosts, getPostMetadata } from '@/lib/blog-utils'
 
 function getAllPostSlugs() {
   const contentDir = path.join(process.cwd(), 'content')
   const files = fs.readdirSync(contentDir).filter(f => f.endsWith('.mdx'))
-  return files.map(f => f.replace('.mdx', ''))
+  return files
+    .map(f => f.replace('.mdx', ''))
+    .filter(slug => !getPostMetadata(path.join(contentDir, `${slug}.mdx`)).draft)
 }
 
 export function generateStaticParams() {
