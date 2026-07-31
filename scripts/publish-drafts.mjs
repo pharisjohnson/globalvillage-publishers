@@ -5,9 +5,10 @@
  * Modes:
  *   node scripts/publish-drafts.mjs [count] [--dry-run]
  *     Publishes the next `count` draft posts (default 1): removes the
- *     `draft: true` flag and re-stamps the date to today (UTC). Newest
- *     drafts first. Used by the GitHub Actions schedule (Mon + Thu) and
- *     can be run manually to catch up.
+ *     `draft: true` flag and re-stamps the date to today (UTC). Drafts are
+ *     published in ascending date order (earliest scheduled date first).
+ *     Used by the GitHub Actions schedule (Mon + Thu) and can be run
+ *     manually to catch up.
  *
  *   node scripts/publish-drafts.mjs --mark-drafts <slug1,slug2,...>
  *     Marks every post EXCEPT the given slugs as draft. One-time setup.
@@ -61,7 +62,7 @@ function writePost(post, block) {
 
 // ---- mode: list ----
 if (args.includes('--list')) {
-  const posts = allPosts().sort((a, b) => (b.date || '').localeCompare(a.date || ''))
+  const posts = allPosts().sort((a, b) => (a.date || '').localeCompare(b.date || ''))
   for (const p of posts) {
     console.log(`${p.draft ? 'DRAFT   ' : 'LIVE    '} ${p.date || '????-??-??'}  ${p.slug}`)
   }
@@ -95,7 +96,7 @@ const count = parseInt(args.find((a) => /^\d+$/.test(a)) || '1', 10)
 
 const drafts = allPosts()
   .filter((p) => p.draft)
-  .sort((a, b) => (b.date || '').localeCompare(a.date || '') || a.slug.localeCompare(b.slug))
+  .sort((a, b) => (a.date || '').localeCompare(b.date || '') || a.slug.localeCompare(b.slug))
 
 if (drafts.length === 0) {
   console.log('NO_DRAFTS: nothing to publish')
