@@ -301,14 +301,6 @@ export default function TscImageMagazine() {
         </div>
       </section>
 
-      {/* Deadline */}
-      <section style={{ padding: '0 0 48px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#414142', borderRadius: '12px', padding: '24px 32px', flexWrap: 'wrap', gap: '12px' }}>
-          <div style={{ fontSize: '11px', fontWeight: 600, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '2px' }}>Booking Deadline</div>
-          <div style={{ fontFamily: "'Inter', sans-serif", fontSize: '20px', fontWeight: 700, color: '#fff' }}>15 July 2026</div>
-        </div>
-      </section>
-
       {/* CTA */}
       <section style={{ padding: '48px 0', textAlign: 'center' }}>
         <h2 style={{ fontFamily: "'Inter', sans-serif", fontSize: '24px', fontWeight: 700, color: '#414142', marginBottom: '16px' }}>Ready to Reach Kenya&apos;s Educators?</h2>
