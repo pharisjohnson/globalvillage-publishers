@@ -40,7 +40,7 @@ export default function Footer() {
           <div className="footer-brand">
             <div className="footer-logo">
               <img 
-                src="/GVP logo 2.png" 
+                src="/gvp-logo.png" 
                 alt="Global Village Publishers" 
               />
               <span>Global Village Publishers</span>

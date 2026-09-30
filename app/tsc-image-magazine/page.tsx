@@ -30,7 +30,7 @@ export default function TscImageMagazine() {
             in collaboration with
           </span>
           <img
-            src="/GVP logo 2.png"
+            src="/gvp-logo.png"
             alt="Global Village Publishers"
             style={{ height: '60px', objectFit: 'contain' }}
           />
