@@ -127,8 +127,9 @@ export default function TeachersImageArchive() {
           <div className="section-tag">Teachers&apos; Image</div>
           <h1 className="section-title">Read Online Archive</h1>
           <p className="section-desc">
-            Browse past editions of the Teachers Service Commission&apos;s official magazine,
-            published by Global Village Publishers. Read online — downloads are disabled.
+            Browse past editions of the Teachers Service Commission&apos;s official magazine.
+            Global Village Publishers is its marketing and advertising consultant.
+            Read online — downloads are disabled.
           </p>
         </div>
       </header>

@@ -35,16 +35,17 @@ interface TextLayerClass {
   };
 }
 
+// A4 portrait ratio used to reserve space before a page's real size is known.
+const DEFAULT_PAGE_ASPECT = 0.707;
+
 function PdfPage({
   doc,
   pageNumber,
   textLayerClass,
-  aspect,
 }: {
   doc: PdfDoc;
   pageNumber: number;
   textLayerClass: TextLayerClass | null;
-  aspect: number;
 }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const surfaceRef = useRef<HTMLDivElement>(null);
@@ -73,6 +74,10 @@ function PdfPage({
         const containerWidth = wrap.clientWidth || 820;
         const scale = Math.min(containerWidth / base.width, 2.5);
         const viewport = page.getViewport({ scale });
+        // Correct the reserved space now that we know this page's true size.
+        if (viewport.height > 0) {
+          wrap.style.aspectRatio = String(viewport.width / viewport.height);
+        }
         const ctx = canvas.getContext('2d');
         if (!ctx) {
           setState('error');
@@ -139,7 +144,7 @@ function PdfPage({
       ref={wrapRef}
       className="pdf-page"
       data-page-number={pageNumber}
-      style={{ aspectRatio: String(aspect || 0.707) }}
+      style={{ aspectRatio: String(DEFAULT_PAGE_ASPECT) }}
     >
       <div ref={surfaceRef} className="pdf-page-surface">
         <canvas ref={canvasRef} className="pdf-page-canvas" />
@@ -162,7 +167,6 @@ export default function PdfViewer({ src, title, initialPage, onPageChange }: Pdf
   const [numPages, setNumPages] = useState(0);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [error, setError] = useState<string | null>(null);
-  const [aspects, setAspects] = useState<number[]>([]);
   const textLayerClassRef = useRef<TextLayerClass | null>(null);
   const pagesRef = useRef<HTMLDivElement>(null);
 
@@ -189,20 +193,6 @@ export default function PdfViewer({ src, title, initialPage, onPageChange }: Pdf
           return;
         }
         textLayerClassRef.current = pdfjs.TextLayer;
-        // Each page can have its own size (portrait pages vs. landscape spreads),
-        // so record a per-page aspect ratio to reserve the correct height. This
-        // keeps the book flowing continuously with no empty gaps between pages.
-        const pageAspects: number[] = [];
-        for (let n = 1; n <= pdfDoc.numPages; n++) {
-          try {
-            const p = await pdfDoc.getPage(n);
-            const vp = p.getViewport({ scale: 1 });
-            pageAspects[n - 1] = vp.height > 0 ? vp.width / vp.height : 0.707;
-          } catch {
-            pageAspects[n - 1] = 0.707;
-          }
-        }
-        setAspects(pageAspects);
         setDoc(pdfDoc);
         setNumPages(pdfDoc.numPages);
         setStatus('ready');
@@ -287,7 +277,6 @@ export default function PdfViewer({ src, title, initialPage, onPageChange }: Pdf
                 doc={doc}
                 pageNumber={i + 1}
                 textLayerClass={textLayerClassRef.current}
-                aspect={aspects[i] || 0.707}
               />
             ))}
           </div>
