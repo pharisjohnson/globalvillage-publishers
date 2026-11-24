@@ -5,24 +5,60 @@ import { useEffect, useRef, useState } from 'react';
 interface PdfViewerProps {
   src: string;
   title?: string;
+  initialPage?: number;
+  onPageChange?: (page: number) => void;
+}
+
+interface Viewport {
+  width: number;
+  height: number;
+}
+
+interface PdfPageProxy {
+  getViewport: (o: { scale: number }) => Viewport;
+  render: (o: { canvasContext: CanvasRenderingContext2D; viewport: Viewport }) => {
+    promise: Promise<void>;
+  };
+  getTextContent: () => Promise<unknown>;
+  cleanup?: () => void;
 }
 
 interface PdfDoc {
   numPages: number;
-  getPage: (n: number) => Promise<unknown>;
+  getPage: (n: number) => Promise<PdfPageProxy>;
   destroy: () => void;
 }
 
-function PdfPage({ doc, pageNumber }: { doc: PdfDoc; pageNumber: number }) {
+interface TextLayerClass {
+  new (opts: { textContentSource: unknown; container: HTMLElement; viewport: unknown }): {
+    render: () => Promise<void>;
+  };
+}
+
+function PdfPage({
+  doc,
+  pageNumber,
+  textLayerClass,
+  aspect,
+}: {
+  doc: PdfDoc;
+  pageNumber: number;
+  textLayerClass: TextLayerClass | null;
+  aspect: number;
+}) {
   const wrapRef = useRef<HTMLDivElement>(null);
+  const surfaceRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const textLayerRef = useRef<HTMLDivElement>(null);
   const [state, setState] = useState<'pending' | 'rendering' | 'done' | 'error'>('pending');
   const startedRef = useRef(false);
 
   useEffect(() => {
     const wrap = wrapRef.current;
+    const surface = surfaceRef.current;
     const canvas = canvasRef.current;
-    if (!wrap || !canvas) return;
+    const textLayerDiv = textLayerRef.current;
+    if (!wrap || !surface || !canvas || !textLayerDiv) return;
 
     let disposed = false;
     let observer: IntersectionObserver | null = null;
@@ -32,11 +68,7 @@ function PdfPage({ doc, pageNumber }: { doc: PdfDoc; pageNumber: number }) {
       startedRef.current = true;
       setState('rendering');
       try {
-        const page = (await doc.getPage(pageNumber)) as {
-          getViewport: (opts: { scale: number }) => { width: number; height: number };
-          render: (opts: { canvasContext: CanvasRenderingContext2D; viewport: unknown }) => { promise: Promise<void> };
-          cleanup?: () => void;
-        };
+        const page = await doc.getPage(pageNumber);
         const base = page.getViewport({ scale: 1 });
         const containerWidth = wrap.clientWidth || 820;
         const scale = Math.min(containerWidth / base.width, 2.5);
@@ -51,8 +83,29 @@ function PdfPage({ doc, pageNumber }: { doc: PdfDoc; pageNumber: number }) {
         canvas.height = Math.floor(viewport.height * dpr);
         canvas.style.width = `${Math.floor(viewport.width)}px`;
         canvas.style.height = `${Math.floor(viewport.height)}px`;
+        surface.style.width = `${Math.floor(viewport.width)}px`;
+        surface.style.height = `${Math.floor(viewport.height)}px`;
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         await page.render({ canvasContext: ctx, viewport }).promise;
+
+        if (textLayerClass && !disposed) {
+          try {
+            textLayerDiv.style.setProperty('--total-scale-factor', String(scale));
+            textLayerDiv.style.setProperty('--scale-factor', String(scale));
+            textLayerDiv.style.setProperty('--scale-round-x', '1px');
+            textLayerDiv.style.setProperty('--scale-round-y', '1px');
+            const textContent = await page.getTextContent();
+            const textLayer = new textLayerClass({
+              textContentSource: textContent,
+              container: textLayerDiv,
+              viewport,
+            });
+            await textLayer.render();
+          } catch {
+            /* text layer is best-effort; the page still renders */
+          }
+        }
+
         if (page.cleanup) page.cleanup();
         if (!disposed) setState('done');
       } catch {
@@ -79,11 +132,19 @@ function PdfPage({ doc, pageNumber }: { doc: PdfDoc; pageNumber: number }) {
       disposed = true;
       observer?.disconnect();
     };
-  }, [doc, pageNumber]);
+  }, [doc, pageNumber, textLayerClass]);
 
   return (
-    <div ref={wrapRef} className="pdf-page">
-      <canvas ref={canvasRef} className="pdf-page-canvas" />
+    <div
+      ref={wrapRef}
+      className="pdf-page"
+      data-page-number={pageNumber}
+      style={{ aspectRatio: String(aspect || 0.707) }}
+    >
+      <div ref={surfaceRef} className="pdf-page-surface">
+        <canvas ref={canvasRef} className="pdf-page-canvas" />
+        <div ref={textLayerRef} className="pdf-text-layer" />
+      </div>
       {state !== 'done' && (
         <div className="pdf-page-status">
           <div className="pdf-spinner" />
@@ -96,11 +157,14 @@ function PdfPage({ doc, pageNumber }: { doc: PdfDoc; pageNumber: number }) {
   );
 }
 
-export default function PdfViewer({ src, title }: PdfViewerProps) {
+export default function PdfViewer({ src, title, initialPage, onPageChange }: PdfViewerProps) {
   const [doc, setDoc] = useState<PdfDoc | null>(null);
   const [numPages, setNumPages] = useState(0);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [error, setError] = useState<string | null>(null);
+  const [aspect, setAspect] = useState(0.707);
+  const textLayerClassRef = useRef<TextLayerClass | null>(null);
+  const pagesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -115,6 +179,7 @@ export default function PdfViewer({ src, title }: PdfViewerProps) {
         const pdfjs = (await import('pdfjs-dist')) as unknown as {
           version: string;
           GlobalWorkerOptions: { workerSrc: string };
+          TextLayer: TextLayerClass;
           getDocument: (opts: { url: string }) => { promise: Promise<PdfDoc> };
         };
         pdfjs.GlobalWorkerOptions.workerSrc = `https://cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
@@ -122,6 +187,14 @@ export default function PdfViewer({ src, title }: PdfViewerProps) {
         if (cancelled) {
           pdfDoc.destroy();
           return;
+        }
+        textLayerClassRef.current = pdfjs.TextLayer;
+        try {
+          const page1 = await pdfDoc.getPage(1);
+          const vp1 = page1.getViewport({ scale: 1 });
+          if (vp1.height > 0) setAspect(vp1.width / vp1.height);
+        } catch {
+          /* keep default aspect */
         }
         setDoc(pdfDoc);
         setNumPages(pdfDoc.numPages);
@@ -146,6 +219,38 @@ export default function PdfViewer({ src, title }: PdfViewerProps) {
     };
   }, [src]);
 
+  // Scroll to the requested page once the document is ready.
+  useEffect(() => {
+    if (status !== 'ready' || !initialPage) return;
+    const el = pagesRef.current?.querySelector(`[data-page-number="${initialPage}"]`);
+    if (el) el.scrollIntoView({ block: 'start' });
+  }, [status, initialPage]);
+
+  // Track the current page as the reader scrolls.
+  useEffect(() => {
+    if (status !== 'ready') return;
+    const compute = () => {
+      const pages = pagesRef.current?.querySelectorAll('[data-page-number]');
+      if (!pages || pages.length === 0) return;
+      let current = 1;
+      const threshold = 150;
+      pages.forEach((p) => {
+        const el = p as HTMLElement;
+        if (el.getBoundingClientRect().top <= threshold) {
+          current = Number(el.dataset.pageNumber || 1);
+        }
+      });
+      onPageChange?.(current);
+    };
+    compute();
+    window.addEventListener('scroll', compute, { passive: true });
+    window.addEventListener('resize', compute, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', compute);
+      window.removeEventListener('resize', compute);
+    };
+  }, [status, onPageChange]);
+
   return (
     <div className="pdf-viewer" onContextMenu={(e) => e.preventDefault()}>
       {status === 'loading' && (
@@ -168,9 +273,15 @@ export default function PdfViewer({ src, title }: PdfViewerProps) {
             <span className="pdf-viewer-title">{title || 'Publication'}</span>
             <span className="pdf-viewer-count">{numPages} pages</span>
           </div>
-          <div className="pdf-viewer-pages" onDragStart={(e) => e.preventDefault()}>
+          <div className="pdf-viewer-pages" ref={pagesRef} onDragStart={(e) => e.preventDefault()}>
             {Array.from({ length: numPages }, (_, i) => (
-              <PdfPage key={i + 1} doc={doc} pageNumber={i + 1} />
+              <PdfPage
+                key={i + 1}
+                doc={doc}
+                pageNumber={i + 1}
+                textLayerClass={textLayerClassRef.current}
+                aspect={aspect}
+              />
             ))}
           </div>
         </>
