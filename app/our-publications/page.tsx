@@ -23,6 +23,7 @@ interface GridPub {
   title: string;
   series: string;
   href: string;
+  action?: string;
 }
 
 const gridPubs: GridPub[] = [
@@ -86,8 +87,9 @@ const gridPubs: GridPub[] = [
     src: '/tsc-image-vol35.jpg',
     alt: "Teachers' Image Vol 35",
     title: "Teachers' Image",
-    series: 'Volume 35 (Jan-Jun 2026)',
-    href: '/Teachers-Image-Vol35.pdf',
+    series: 'Volumes 29–36',
+    href: '/teachers-image',
+    action: 'Read Online',
   },
   {
     src: '/diplomatt-min.jpg',
@@ -207,9 +209,9 @@ export default function OurPublications() {
                 <li>Policy updates and professional development</li>
                 <li>Stories of educational excellence</li>
               </ul>
-              <a href="/Teachers-Image-Vol35.pdf" target="_blank" rel="noopener noreferrer" className="btn btn-primary">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 15V3m0 12l-4-4m4 4l4-4M21 15v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                Download Vol. 35
+              <a href="/teachers-image" className="btn btn-primary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/></svg>
+                Read Online
               </a>
             </div>
             <div className="pub-visual">
@@ -261,7 +263,7 @@ export default function OurPublications() {
                   <img src={pub.src} alt={pub.alt} className="publication-img" />
                   <span className="publication-dl-overlay">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 15V3m0 12l-4-4m4 4l4-4M21 15v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                    Download
+                    {pub.action || 'Download'}
                   </span>
                 </div>
                 <div className="publication-info">

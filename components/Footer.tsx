@@ -1,34 +1,36 @@
 import Link from 'next/link';
 
-interface DownloadPublication {
+interface FooterPublication {
   id: number;
   title: string;
   series: string;
   cover: string;
-  pdf: string;
+  href: string;
+  cta?: string;
 }
 
-const downloadPubs: DownloadPublication[] = [
+const downloadPubs: FooterPublication[] = [
   {
     id: 1,
     title: 'Best of Kenya Vol. 4',
     series: 'Kenya Beyond 60',
     cover: '/Best of Kenya Volume 4 - Beyond 60.png',
-    pdf: '/Best of Kenya Vol 4 - Beyond 60.pdf.pdf',
+    href: '/Best of Kenya Vol 4 - Beyond 60.pdf.pdf',
   },
   {
     id: 2,
     title: 'Best of Kenya Cooperatives',
     series: '2025 Special Edition',
     cover: '/BOK COOPERATIVES  cover.jpg',
-    pdf: '/BOK COOPERATIVES - FINAL.pdf.pdf',
+    href: '/BOK COOPERATIVES - FINAL.pdf.pdf',
   },
   {
     id: 3,
-    title: "Teachers' Image Vol 35",
-    series: 'Jan-Jun 2026',
+    title: "Teachers' Image",
+    series: 'Volumes 29–36',
     cover: '/tsc-image-vol35.jpg',
-    pdf: '/Teachers-Image-Vol35.pdf',
+    href: '/teachers-image',
+    cta: 'Read online',
   },
 ];
 
@@ -85,9 +87,9 @@ export default function Footer() {
                     </p>
                     <p className="footer-pub-series">{pub.series}</p>
                     <a
-                      href={pub.pdf}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href={pub.href}
+                      target={pub.href.endsWith('.pdf') ? '_blank' : undefined}
+                      rel={pub.href.endsWith('.pdf') ? 'noopener noreferrer' : undefined}
                       className="footer-pub-dl"
                     >
                       <svg
@@ -105,7 +107,7 @@ export default function Footer() {
                           strokeLinejoin="round"
                         />
                       </svg>
-                      Download
+                      {pub.cta || 'Download'}
                     </a>
                   </div>
                 </div>

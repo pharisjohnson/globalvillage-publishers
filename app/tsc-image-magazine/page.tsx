@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 export default function TscImageMagazine() {
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
@@ -71,7 +73,7 @@ export default function TscImageMagazine() {
           Kenya&apos;s most trusted education publication, reaching over 400,000 educators across 35,000+ schools nationwide.
         </p>
         <div style={{ marginTop: '32px', display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <a href="/Teachers-Image-Vol35.pdf" download style={{
+          <Link href="/teachers-image" style={{
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
@@ -85,9 +87,9 @@ export default function TscImageMagazine() {
             textTransform: 'uppercase',
             letterSpacing: '0.5px',
           }}>
-            <svg viewBox="0 0 24 24" style={{ width: 20, height: 20, fill: 'currentColor' }}><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-            Download Latest Edition
-          </a>
+            <svg viewBox="0 0 24 24" style={{ width: 20, height: 20, fill: 'none', stroke: 'currentColor', strokeWidth: 2 }}><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>
+            Read Online
+          </Link>
           <a href="mailto:smugo@globalvillagepublishers.co.ke" style={{
             display: 'inline-flex',
             alignItems: 'center',
