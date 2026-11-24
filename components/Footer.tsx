@@ -60,6 +60,7 @@ export default function Footer() {
               <li><Link href="/our-publications">Our Work</Link></li>
               <li><Link href="/blog">Blog</Link></li>
               <li><Link href="/contact">Contact</Link></li>
+              <li><Link href="/gvp-reader-plugin">WordPress Plugin</Link></li>
             </ul>
           </div>
           
