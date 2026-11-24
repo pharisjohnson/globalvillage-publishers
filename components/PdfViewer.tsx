@@ -162,7 +162,7 @@ export default function PdfViewer({ src, title, initialPage, onPageChange }: Pdf
   const [numPages, setNumPages] = useState(0);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [error, setError] = useState<string | null>(null);
-  const [aspect, setAspect] = useState(0.707);
+  const [aspects, setAspects] = useState<number[]>([]);
   const textLayerClassRef = useRef<TextLayerClass | null>(null);
   const pagesRef = useRef<HTMLDivElement>(null);
 
@@ -189,13 +189,20 @@ export default function PdfViewer({ src, title, initialPage, onPageChange }: Pdf
           return;
         }
         textLayerClassRef.current = pdfjs.TextLayer;
-        try {
-          const page1 = await pdfDoc.getPage(1);
-          const vp1 = page1.getViewport({ scale: 1 });
-          if (vp1.height > 0) setAspect(vp1.width / vp1.height);
-        } catch {
-          /* keep default aspect */
+        // Each page can have its own size (portrait pages vs. landscape spreads),
+        // so record a per-page aspect ratio to reserve the correct height. This
+        // keeps the book flowing continuously with no empty gaps between pages.
+        const pageAspects: number[] = [];
+        for (let n = 1; n <= pdfDoc.numPages; n++) {
+          try {
+            const p = await pdfDoc.getPage(n);
+            const vp = p.getViewport({ scale: 1 });
+            pageAspects[n - 1] = vp.height > 0 ? vp.width / vp.height : 0.707;
+          } catch {
+            pageAspects[n - 1] = 0.707;
+          }
         }
+        setAspects(pageAspects);
         setDoc(pdfDoc);
         setNumPages(pdfDoc.numPages);
         setStatus('ready');
@@ -280,7 +287,7 @@ export default function PdfViewer({ src, title, initialPage, onPageChange }: Pdf
                 doc={doc}
                 pageNumber={i + 1}
                 textLayerClass={textLayerClassRef.current}
-                aspect={aspect}
+                aspect={aspects[i] || 0.707}
               />
             ))}
           </div>
